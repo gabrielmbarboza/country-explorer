@@ -1,0 +1,12 @@
+services:
+  countries_app:
+    tty: true
+    image: countriesapp
+    build:
+      context: ./countries-app
+      dockerfile: Dockerfile.dev
+    command: npm run start
+    volumes:
+      - ./countries-app:/usr/src/app
+    ports:
+      - 3001:3000

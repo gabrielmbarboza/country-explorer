@@ -1,0 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+countries-app/node_modules
+countries-app/.pnp
+countries-app/.pnp.js
+
+# testing
+countries-app/coverage
+
+# production
+countries-app/build
+
+# misc
+.DS_Store
+countries-app/.env.local
+countries-app/.env.development.local
+countries-app/.env.test.local
+countries-app/.env.production.local
+
+countries-app/npm-debug.log*
+countries-app/yarn-debug.log*
+countries-app/yarn-error.log*
