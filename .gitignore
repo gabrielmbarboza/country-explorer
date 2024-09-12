@@ -21,3 +21,5 @@ countries-app/.env.production.local
 countries-app/npm-debug.log*
 countries-app/yarn-debug.log*
 countries-app/yarn-error.log*
+
+tmp

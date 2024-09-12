@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+# 🌎 Country Explorer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Table of Contents
 
-## Available Scripts
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Usage](#usage)
 
-In the project directory, you can run:
+## About <a name = "about"></a>
 
-### `npm start`
+The aim of this project is to showcase my skills in developing React and Rails applications. 🤓
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Getting Started <a name = "getting_started"></a>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### `npm test`
+⚠️ Before `building` the countries_api project, you need to make some changes directly to the project. See the countries_api README.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+What things you need to run the project.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Docker
+- docker-compose
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The technologies involved in this project.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Docker (26.0.0)
+- docker-compose (2.26.1)
+- NodeJS (Latest)
+- React (18.3.1)
 
-### `npm run eject`
+### Installing
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+A step by step series of examples that tell you how to get a development env running.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Clone this repository
+```bash
+git clone git@github.com:gabrielmbarboza/country-explorer.git
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Initialize the submodule:
+```bash
+git submodule init
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Force git to clone the submodule:
+```bash
+git submodule update
+```
 
-## Learn More
+Building the project
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+docker compose build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Running the Bundler
+```bash
+docker compose run --rm countries_api bundle install
+```
 
-### Code Splitting
+Preparing to use the API
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+docker compose run --rm countries_api bin/rails db:create
+```
 
-### Analyzing the Bundle Size
+Migrating the Countries API database
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+docker compose run --rm countries_api bin/rails db:prepare
+```
 
-### Making a Progressive Web App
+Use the `countries:load` task to populate the database with valid countries.
+```bash
+docker compose run --rm countries_api bin/rails countries:load
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+End with an example of getting some data out of the system or using it for a little demo.
 
-### Advanced Configuration
+## Usage <a name = "usage"></a>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Using Docker and docker-compose, just run the following command.
 
-### Deployment
+```bash
+docker compose up
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+and access the following url in your broswer.
 
-### `npm run build` fails to minify
+```bash
+http://0.0.0.0:3001
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Todo <a name = "todo"></a>
+
+- [ ] Create the tests.
+- [ ] Improve the authentication feature.
+- [ ] Improve the navigation.
+- [ ] Create system validations and notifications.
+- [ ] Create Not Found Page

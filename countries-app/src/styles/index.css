@@ -1,0 +1,52 @@
+:root {
+  --primary-color: #e85a81;
+  --secondary-color: #7048e8;
+  --background-color: #f9f9f9;
+  --text-color: #212429;
+  --header-font: Roboto, Verdana, Tahoma, sans-serif;
+  --body-font: Roboto, Verdana, Tahoma, sans-serif;
+  --border-radius: 4px;
+  --padding: 16px;
+  --margin: 16px;
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+  font-family: "Roboto", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent
+}
+
+body {
+  margin: 0;
+  line-height: inherit
+}
+
+button {
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: var(--padding);
+  cursor: pointer;
+  font-family: var(--body-font);
+  transition: background-color 0.3s;
+  /* width: 200px; */
+}
+
+button:hover {
+  background-color: darken(var(--secondary-color), 10%);
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
