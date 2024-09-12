@@ -39,14 +39,9 @@ Clone this repository
 git clone git@github.com:gabrielmbarboza/country-explorer.git
 ```
 
-Initialize the submodule:
+Initialize the countries-api repository into this project:
 ```bash
-git submodule init
-```
-
-Force git to clone the submodule:
-```bash
-git submodule update
+git clone git@github.com:gabrielmbarboza/countries-api.git
 ```
 
 Building the project
