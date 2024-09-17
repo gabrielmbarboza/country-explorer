@@ -3,7 +3,7 @@ import { FiLock } from "react-icons/fi";
 import '../styles/Country.css';
 import { Link } from "react-router-dom";
 
-const Home = () => {
+function Home() {
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow-md">

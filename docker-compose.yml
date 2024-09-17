@@ -5,7 +5,7 @@ services:
     build:
       context: ./countries-app
       dockerfile: Dockerfile.dev
-    command: npm run start
+    command: npm run dev
     volumes:
       - ./countries-app:/usr/src/app
     ports:

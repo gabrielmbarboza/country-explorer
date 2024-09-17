@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "../styles/Login.css";
-import signupImageMain from "../assets/img/sign_up.svg";
+import signupImageMain from '../assets/img/sign_up.svg';
 
-const Signup = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
+function Signup() {
+  const [username, setUsername] = useState<String>("");
+  const [email, setEmail] = useState<String>("");
+  const [password, setPassword] = useState<String>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<String>("");
   const navigate = useNavigate();
 
-  const handlerSubmit = async (e) => {
+  const handlerSubmit = async (e: any) => {
     e.preventDefault();
 
     const requestOptions = {

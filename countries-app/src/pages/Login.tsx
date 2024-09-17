@@ -6,12 +6,12 @@ import googleLogo from "../assets/img/google.svg";
 import facebookLogo from "../assets/img/facebook.svg";
 import appleLogo from "../assets/img/apple.svg";
 
-const Login = () => {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handlerSubmit = async (e) => {
+  const handlerSubmit = async (e: any) => {
     e.preventDefault();
 
     const requestOptions = {
@@ -27,7 +27,7 @@ const Login = () => {
 
     const response = await fetch('http://0.0.0.0:3000/login', requestOptions);
     const data = await response.json();
-    
+
     if ('token' in data && data.token !== undefined) {
       localStorage.setItem('token', data.token)
       navigate('/explorer')
@@ -46,7 +46,7 @@ const Login = () => {
               <div className="input-box">
                 <span>Usuário</span>
                 <input className="input-login" type="email" placeholder="seu@email.com.br" onChange={e => {
-                    setEmail(e.target.value)  
+                    setEmail(e.target.value)
                 }}/>
               </div>
 

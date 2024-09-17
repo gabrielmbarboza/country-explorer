@@ -4,11 +4,13 @@ import { FiSearch, FiUser, FiBell, FiLogOut } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
 import '../styles/Country.css';
 
-const Country = () => {
+import { ICountry } from '../types'
+
+function Country() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [countries, setCountries] = useState([]);
-  const [filteredCountries, setFilteredCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [countries, setCountries] = useState<Array<ICountry>>([]);
+  const [filteredCountries, setFilteredCountries] = useState<Array<ICountry>>([]);
+  const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ const Country = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    if(token === undefined || token == "" || token === null) {
+    if(token === undefined || token === "" || token === null) {
       navigate("/login")
     }
 
@@ -45,14 +47,15 @@ const Country = () => {
     const results = countries.filter(country =>
       country.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     setFilteredCountries(results);
   }, [searchTerm, countries]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: any) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleCountryClick = (country) => {
+  const handleCountryClick = (country: ICountry) => {
     setSelectedCountry(country);
     setIsModalOpen(true);
   };
@@ -139,9 +142,9 @@ const Country = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredCountries.map((country) => (
+          {filteredCountries.map((country: ICountry) => (
             <div
-              key={country.cca3}
+              key={country.identifier}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
               onClick={() => handleCountryClick(country)}
             >
@@ -153,7 +156,7 @@ const Country = () => {
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{country.name}</h2>
                 <p className="text-gray-600">Capital: {country.capital || 'N/A'}</p>
-                <p className="text-gray-600">População: {country.population.toLocaleString()}</p>
+                <p className="text-gray-600">População: {country.population?.toLocaleString()}</p>
               </div>
             </div>
           ))}
@@ -188,7 +191,7 @@ const Country = () => {
               </div>
               <div>
                 <p className="font-semibold">População:</p>
-                <p>{selectedCountry.population.toLocaleString()}</p>
+                <p>{selectedCountry.population?.toLocaleString()}</p>
               </div>
               <div>
                 <p className="font-semibold">Localização:</p>
@@ -196,7 +199,7 @@ const Country = () => {
               </div>
               <div>
                 <p className="font-semibold">Área:</p>
-                <p>{selectedCountry.area.toLocaleString() || 'N/A'}</p>
+                <p>{selectedCountry.area?.toLocaleString() || 'N/A'}</p>
               </div>
               <div>
                 <p className="font-semibold">Línguas:</p>
@@ -219,7 +222,7 @@ const Country = () => {
               <div>
                 <p className="font-semibold">Moedas:</p>
                 <p>
-                  {selectedCountry.currencies || 'N/A'}
+                  {selectedCountry.currency_units || 'N/A'}
                 </p>
               </div>
             </div>
