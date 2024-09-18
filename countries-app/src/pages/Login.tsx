@@ -1,40 +1,45 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "../styles/Login.css";
 import loginImageMain from "../assets/img/login.svg";
 import googleLogo from "../assets/img/google.svg";
 import facebookLogo from "../assets/img/facebook.svg";
 import appleLogo from "../assets/img/apple.svg";
+import { useAuth } from "../hooks/useAuth";
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const auth = useAuth();
 
-  const handlerSubmit = async (e: any) => {
-    e.preventDefault();
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-          email: email,
-          password: password
-      })
-    };
+    try {
+      await auth.login(email, password)
 
-    const response = await fetch('http://0.0.0.0:3000/login', requestOptions);
-    const data = await response.json();
-
-    if ('token' in data && data.token !== undefined) {
-      localStorage.setItem('token', data.token)
       navigate('/explorer')
+    } catch (error) {
+      toast.error("Opa! Credenciais inválidas");
     }
   }
 
-    return (
+  return (
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"/><ToastContainer />
       <div className="container-login">
         <div className="img-box">
           <img src={loginImageMain} />
@@ -42,25 +47,22 @@ function Login() {
         <div className="content-box">
           <div className="form-box">
             <h2>Login</h2>
-            <form onSubmit={handlerSubmit}>
+            <form onSubmit={handleSubmit}>
               <div className="input-box">
                 <span>Usuário</span>
-                <input className="input-login" type="email" placeholder="seu@email.com.br" onChange={e => {
+                <input name="email" className="input-login" type="email" placeholder="seu@email.com.br" onChange={e => {
                     setEmail(e.target.value)
                 }}/>
               </div>
-
               <div className="input-box">
                 <span>Senha</span>
-                <input className="input-login" type="password" placeholder="senha" onChange={e => {
+                <input name="password" className="input-login" type="password" placeholder="senha" onChange={e => {
                     setPassword(e.target.value)
                 }}/>
               </div>
-
               <div className="input-box">
                 <input className="input-login" type="submit" value="Entrar" />
               </div>
-
               <div className="input-box">
                 <p>
                   Não Tem Uma Conta? <a href="/signup">Inscreva-se</a>
@@ -70,19 +72,20 @@ function Login() {
             <h3>Logar Com</h3>
             <ul className="ul">
               <li>
-                <img src={googleLogo} />
+                <img src={googleLogo} alt="google"/>
               </li>
               <li>
-                <img src={facebookLogo} />
+                <img src={facebookLogo} alt="facebook" />
               </li>
               <li>
-                <img src={appleLogo} />
+                <img src={appleLogo} alt="google" />
               </li>
             </ul>
           </div>
         </div>
       </div>
-    );
+    </>
+  );
 }
 
 export default Login;

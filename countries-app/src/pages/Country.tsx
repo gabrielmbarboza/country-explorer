@@ -1,50 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FiSearch, FiUser, FiBell, FiLogOut } from 'react-icons/fi';
-import { IoMdClose } from 'react-icons/io';
-import '../styles/Country.css';
-
-import { ICountry } from '../types'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiSearch, FiUser, FiBell, FiLogOut } from "react-icons/fi";
+import { IoMdClose } from "react-icons/io";
+import { IApiResponse, ICountry } from "../types";
+import { ToastContainer, toast } from 'react-toastify';
+import { Api } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
+import "../styles/Country.css";
 
 function Country() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [countries, setCountries] = useState<Array<ICountry>>([]);
-  const [filteredCountries, setFilteredCountries] = useState<Array<ICountry>>([]);
+  const [filteredCountries, setFilteredCountries] = useState<Array<ICountry>>(
+    []
+  );
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const auth = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if(token === undefined || token === "" || token === null) {
-      navigate("/login")
-    }
 
     const fetchCountries = async () => {
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      };
-
       try {
-        const response = await fetch('http://0.0.0.0:3000/api/v1/countries', requestOptions);
-        const data = await response.json();
+        const response = await Api.get<IApiResponse>('api/v1/countries');
+        const countries = response.data.data;
 
-        setCountries(data.data);
-        setFilteredCountries(data.data);
+        setCountries(countries);
+        setFilteredCountries(countries);
       } catch (error) {
-        console.error('Error fetching countries:', error);
+        toast.error("Opa! Credenciais inválidas");
       }
     };
+
     fetchCountries();
   }, []);
 
   useEffect(() => {
-    const results = countries.filter(country =>
+    const results = countries.filter((country) =>
       country.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -69,46 +63,62 @@ function Country() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   };
 
-  const logout = () => {
-    localStorage.setItem('token', '');
-    navigate('/login')
+  const handleLogout = () => {
+    auth.logout();
+    navigate("/login");
+  };
+
+  const getFlagUrl = (identifier: string | null | undefined) => {
+    const flagCdnBaseUrl = 'https://flagcdn.com';
+
+    if (!identifier) identifier = 'un';
+
+    return `${flagCdnBaseUrl}/${identifier.toLowerCase()}.svg`;
+  }
+
+  const getOSMUrl = (osmCode: string | null | undefined) => {
+    const osmBaseUrl = 'https://www.openstreetmap.org/relation';
+
+    if (!osmCode) return "N/A";
+
+    return `${osmBaseUrl}/${osmCode}`;
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow-md">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800 font-color-white">Country Explorer</h1>
+    <>
+    <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"/><ToastContainer />
+    <div className="country-container">
+      <header>
+        <div className="container header-container">
+          <h1 className="header-title">Country Explorer</h1>
           <div className="relative">
-            <button
-              onClick={toggleProfileMenu}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 focus:outline-none"
-            >
-              <FiUser className="w-6 h-6 font-color-white" />
-              <span className="font-color-white">Perfil</span>
+            <button onClick={toggleProfileMenu} className="profile-menu-button">
+              <FiUser className="button-size" />
+              <span>Perfil</span>
             </button>
             {isProfileMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
+              <div className="profile-menu">
+                <a href="#" className="profile-menu-item">
                   Editar Perfil
                 </a>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
+                <a href="#" className="profile-menu-item">
                   <div className="flex items-center">
                     <FiBell className="mr-2" />
                     Notificações
                   </div>
                 </a>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  <div className="flex items-center" onClick={logout}>
+                <a href="#" className="profile-menu-item">
+                  <div className="flex items-center" onClick={handleLogout}>
                     <FiLogOut className="mr-2" />
                     Sair
                   </div>
@@ -118,13 +128,12 @@ function Country() {
           </div>
         </div>
       </header>
-
-      <main className="container mx-auto px-4 py-8">
+      <main>
         <div className="mb-8">
-          <div className="flex items-center max-w-md mx-auto bg-white rounded-lg overflow-hidden">
+          <div className="search-input-box">
             <div className="w-full">
               <input
-                className="w-full px-4 py-2 text-gray-700 focus:outline-none"
+                className="search-input"
                 type="text"
                 placeholder="Procure por um país..."
                 value={searchTerm}
@@ -132,31 +141,32 @@ function Country() {
               />
             </div>
             <div>
-              <button
-                className="flex items-center justify-center px-4 py-2 bg-gray-200 text-gray-700 hover:bg-gray-300 focus:outline-none"
-              >
+              <button className="search-button">
                 <FiSearch className="w-5 h-5" />
               </button>
             </div>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="content-container">
           {filteredCountries.map((country: ICountry) => (
             <div
               key={country.identifier}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
+              className="country-box"
               onClick={() => handleCountryClick(country)}
             >
               <img
-                src={`https://flagcdn.com/${country.identifier.toLowerCase()}.svg`}
-                alt={`Flag of ${country.name}`}
-                className="w-full h-40 object-cover"
+                src={getFlagUrl(country.identifier)}
+                alt={`${country.name}`}
+                className="country-flag-cover"
               />
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{country.name}</h2>
-                <p className="text-gray-600">Capital: {country.capital || 'N/A'}</p>
-                <p className="text-gray-600">População: {country.population?.toLocaleString()}</p>
+                <p className="text-gray-600">
+                  Capital: {country.capital || "N/A"}
+                </p>
+                <p className="text-gray-600">
+                  População: {country.population?.toLocaleString()}
+                </p>
               </div>
             </div>
           ))}
@@ -164,30 +174,27 @@ function Country() {
       </main>
 
       {isModalOpen && selectedCountry && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">{selectedCountry.name}</h2>
-              <button
-                onClick={closeModal}
-                className="text-gray-500 hover:text-gray-700 focus:outline-none"
-              >
+        <div className="modal-container">
+          <div className="modal-box">
+            <div className="modal-header">
+              <h2 className="modal-title">{selectedCountry.name}</h2>
+              <button onClick={closeModal} className="">
                 <IoMdClose className="w-6 h-6" />
               </button>
             </div>
             <img
-              src={`https://flagcdn.com/${selectedCountry.identifier.toLowerCase()}.svg`}
-              alt={`Flag of ${selectedCountry.name}`}
-              className="w-full h-48 object-cover rounded-lg mb-4"
+              src={getFlagUrl(selectedCountry.identifier)}
+              alt={`${selectedCountry.name}`}
+              className="country-flag-cover-full"
             />
             <div className="grid grid-cols-2 gap-4">
-            <div>
+              <div>
                 <p className="font-semibold">Nome:</p>
-                <p>{selectedCountry.name || 'N/A'}</p>
+                <p>{selectedCountry.name || "N/A"}</p>
               </div>
               <div>
                 <p className="font-semibold">Capital:</p>
-                <p>{selectedCountry.capital || 'N/A'}</p>
+                <p>{selectedCountry.capital || "N/A"}</p>
               </div>
               <div>
                 <p className="font-semibold">População:</p>
@@ -199,45 +206,41 @@ function Country() {
               </div>
               <div>
                 <p className="font-semibold">Área:</p>
-                <p>{selectedCountry.area?.toLocaleString() || 'N/A'}</p>
+                <p>{selectedCountry.area?.toLocaleString() || "N/A"}</p>
               </div>
               <div>
                 <p className="font-semibold">Línguas:</p>
-                <p>
-                  {selectedCountry.languages || 'N/A'}
-                </p>
+                <p>{selectedCountry.languages || "N/A"}</p>
               </div>
               <div>
                 <p className="font-semibold">Fuso-horários:</p>
-                <p>
-                  {selectedCountry.timezones || 'N/A'}
-                </p>
+                <p>{selectedCountry.timezones || "N/A"}</p>
               </div>
               <div>
                 <p className="font-semibold">Mapa:</p>
                 <p>
-                  Ver no <a href={`https://www.openstreetmap.org/relation/${selectedCountry.osm_code}` || 'N/A'}>OpenStreetMap</a>
+                  Ver no{" "}
+                  <a href={getOSMUrl(selectedCountry.osm_code)} >
+                    OpenStreetMap
+                  </a>
                 </p>
               </div>
               <div>
                 <p className="font-semibold">Moedas:</p>
-                <p>
-                  {selectedCountry.currency_units || 'N/A'}
-                </p>
+                <p>{selectedCountry.currency_units || "N/A"}</p>
               </div>
             </div>
             <br />
             <div>
-                <p className="font-semibold">Histórico:</p>
-                <p>
-                  {selectedCountry.history || 'N/A'}
-                </p>
-              </div>
+              <p className="font-semibold">Histórico:</p>
+              <p>{selectedCountry.history || "N/A"}</p>
+            </div>
           </div>
         </div>
       )}
     </div>
+    </>
   );
-};
+}
 
 export default Country;

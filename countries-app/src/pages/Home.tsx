@@ -1,12 +1,11 @@
 import React from "react";
 import { FiLock } from "react-icons/fi";
-import '../styles/Country.css';
 import { Link } from "react-router-dom";
 
 function Home() {
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow-md">
+      <header>
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-800 font-color-white">
             Country Explorer
