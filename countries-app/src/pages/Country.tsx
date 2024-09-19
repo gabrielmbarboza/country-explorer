@@ -97,7 +97,7 @@ function Country() {
         draggable
         pauseOnHover
         theme="light"/><ToastContainer />
-    <div className="country-container">
+    <div className="common-container">
       <header>
         <div className="container header-container">
           <h1 className="header-title">Country Explorer</h1>
