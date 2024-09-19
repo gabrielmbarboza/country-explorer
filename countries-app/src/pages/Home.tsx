@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="common-container">
       <header>
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800 font-color-white">
+        <div className="container header-container">
+          <h1 className="header-title">
             Country Explorer
           </h1>
           <div className="relative">
             <Link to="/login"
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+              className="profile-menu-button"
             >
-              <FiLock className="w-6 h-6 font-color-white" />
+              <FiLock className="button-size" />
               <span className="font-color-white">Login</span>
             </Link>
           </div>

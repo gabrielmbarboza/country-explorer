@@ -50,13 +50,13 @@ function Login() {
             <form onSubmit={handleSubmit}>
               <div className="input-box">
                 <span>Usuário</span>
-                <input name="email" className="input-login" type="email" placeholder="seu@email.com.br" onChange={e => {
+                <input name="email" className="input-login" type="email" placeholder="email@host.com" onChange={e => {
                     setEmail(e.target.value)
                 }}/>
               </div>
               <div className="input-box">
                 <span>Senha</span>
-                <input name="password" className="input-login" type="password" placeholder="senha" onChange={e => {
+                <input name="password" className="input-login" type="password" placeholder="informe sua senha" onChange={e => {
                     setPassword(e.target.value)
                 }}/>
               </div>
