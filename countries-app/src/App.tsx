@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { AuthProvider } from "./context/AuthProvider";
 import { ProtectedLayout } from "./components/ProtectedLayout";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               </ProtectedLayout>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

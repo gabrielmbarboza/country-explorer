@@ -91,7 +91,7 @@ http://0.0.0.0:3001
 ## Todo <a name = "todo"></a>
 
 - [ ] Create the tests.
-- [ ] Improve the authentication feature.
-- [ ] Improve the navigation.
-- [ ] Create system validations and notifications.
-- [ ] Create Not Found Page
+- [x] Improve the authentication feature.
+- [x] Improve the navigation.
+- [x] Create system validations and notifications.
+- [x] Create Not Found Page
