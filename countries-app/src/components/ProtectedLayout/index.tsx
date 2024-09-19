@@ -1,12 +1,12 @@
-import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { Navigate } from "react-router-dom";
+import { getUserLocalStorage } from "../../context/AuthProvider/utils";
 
 export const ProtectedLayout = ({ children }: { children: JSX.Element }) => {
-  const auth = useAuth();
-  const navigate = useNavigate();
+  const user = getUserLocalStorage();
 
-  if(!auth.email) {
-    navigate('/login');
+  if(!user || !user.email || !user.token){
+    return <Navigate to="/login" replace={true} />;
   }
 
   return children;
